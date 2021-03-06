@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "parkour-timer",
+  "version": "${version}",
+  "name": "Parkour Timer",
+  "description": "Lobby parkour timer",
+  "authors": [
+    "Tom_The_Geek"
+  ],
+  "contributors": [],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.geek.tom.parkourtimer.ParkourTimer"
+    ],
+    "client": [],
+    "server": []
+  },
+  "mixins": [
+    "parkour-timer.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.2",
+    "fabric": "*"
+  }
+}

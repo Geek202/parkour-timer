@@ -1,0 +1,30 @@
+{
+  "text.parkour_timer.parkour.create.already_exists": "Parkour with id '%s' already exists!",
+  "text.parkour_timer.parkour.create.already_creating": "You are already creating a parkour!",
+  "text.parkour_timer.parkour.create.not_creating": "You are not creating a parkour!",
+  "text.parkour_timer.parkour.create.started": "Started creating a new parkour!",
+  "text.parkour_timer.parkour.create.cannot_start": "Could not start creating a new parkour!",
+  "text.parkour_timer.parkour.create.added_checkpoint": "Added a new checkpoint!",
+  "text.parkour_timer.parkour.create.finished": "Created a new parkour with id: %s",
+
+  "text.parkour_timer.parkour.deleted": "Deleted parkour: %s",
+  "text.parkour_timer.parkour.delete.confirm": "You need to confirm deletion!",
+  "text.parkour_timer.parkour.renamed": "Renamed parkour '%s' to %s",
+
+  "text.parkour_timer.parkour.not_found": "Parkour with id '%s' does not exist!",
+  "text.parkour_timer.parkour.create.requires_overworld": "This command only works in the overworld!",
+
+  "text.parkour_timer.parkour.checkpoint.reached": "Reached checkpoint %s on %s",
+
+  "text.parkour_timer.parkour.started": "Started %s",
+  "text.parkour_timer.parkour.completed": "You completed %s in %.1fs! [Personal Best: %.1fs]",
+  "text.parkour_timer.parkour.completed.new_personal_best": "You completed %s in %.1fs! [New Personal Best]",
+  "text.parkour_timer.parkour.completed.first": "You completed %s in %.1fs!",
+  "text.parkour_timer.parkour.personal_best": "%s beat their personal best of %.1fs for %s [new time: %.1fs]!",
+
+  "text.parkour_timer.parkour.time": "You completed %s in %.1fs!",
+  "text.parkour_timer.parkour.not_completed": "You haven't completed %s!",
+
+  "text.parkour_timer.parkour.cancel": "You canceled the parkour!",
+  "text.parkour_timer.parkour.not_active": "You are not doing a parkour!"
+}

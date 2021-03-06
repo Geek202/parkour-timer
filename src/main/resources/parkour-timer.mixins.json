@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "me.geek.tom.parkourtimer.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinAbstractPressurePlateBlock"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
