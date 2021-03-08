@@ -43,7 +43,7 @@ public class ParkourTimeStorage {
     private void recomputeTopTen() {
         // TODO: Broadcast when top 3 changes for a parkour
         this.topTen = this.times.object2LongEntrySet().stream()
-                // compiler can't infer the type here for some reason, so an (kinda)ugly cast is required
+                // compiler can't infer the type here for some reason, so a (kinda)ugly cast is required
                 .sorted(Comparator.comparingLong((ToLongFunction<Object2LongMap.Entry<UUID>>) Object2LongMap.Entry::getLongValue).reversed())
                 .limit(10).map(e -> new ParkourTime(e.getKey(), e.getLongValue()))
                 .collect(Collectors.toList());
