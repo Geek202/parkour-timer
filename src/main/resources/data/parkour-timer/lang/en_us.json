@@ -22,6 +22,8 @@
   "text.parkour_timer.parkour.completed.first": "You completed %s in %.1fs!",
   "text.parkour_timer.parkour.personal_best": "%s beat their personal best of %.1fs for %s [new time: %.1fs]!",
 
+  "text.parkour_timer.parkour.leaderboard.topspot": "The top leaderboard spot for %s has been taken by %s!",
+
   "text.parkour_timer.parkour.time": "You completed %s in %.1fs!",
   "text.parkour_timer.parkour.not_completed": "You haven't completed %s!",
 

@@ -5,9 +5,9 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import me.geek.tom.parkourtimer.ParkourTimer;
 import me.geek.tom.parkourtimer.parkour.ActiveParkourManager;
 import me.geek.tom.parkourtimer.parkour.Parkour;
-import me.geek.tom.parkourtimer.ParkourTimer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -17,10 +17,10 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 import xyz.nucleoid.plasmid.storage.ServerStorage;
-import xyz.nucleoid.plasmid.util.PlayerRef;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class ParkourStorageManager implements ServerStorage {
@@ -80,13 +80,13 @@ public class ParkourStorageManager implements ServerStorage {
         }
     }
 
-    public ActiveParkourManager.ParkourCompletionResult setOrUpdatePlayerTime(Identifier parkour, PlayerRef player, long time) {
+    public ActiveParkourManager.ParkourCompletionResult setOrUpdatePlayerTime(Identifier parkour, ServerPlayerEntity player, long time) {
         ParkourTimeStorage storage = this.timeStorage.get(parkour);
         if (storage == null) {
             storage = new ParkourTimeStorage(new ArrayList<>(), new Object2LongOpenHashMap<>());
             this.timeStorage.put(parkour, storage);
         }
-        return storage.updatePlayerTime(player, time);
+        return storage.updatePlayerTime(Objects.requireNonNull(this.parkours.get(parkour), "parkour " + parkour), player, time);
     }
 
     @Nullable

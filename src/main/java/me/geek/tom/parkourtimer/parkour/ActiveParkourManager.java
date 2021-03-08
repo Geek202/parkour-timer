@@ -59,10 +59,10 @@ public class ActiveParkourManager {
         long time = endTime - activeParkour.startTime;
 
         this.activeParkour.remove(playerRef);
-        return this.recordPlayerTime(playerRef, parkour, time);
+        return this.recordPlayerTime(player, parkour, time);
     }
 
-    private ParkourCompletionResult recordPlayerTime(PlayerRef player, Identifier parkour, long time) {
+    private ParkourCompletionResult recordPlayerTime(ServerPlayerEntity player, Identifier parkour, long time) {
         ParkourStorageManager storage = ParkourTimer.getStorage();
         return storage.setOrUpdatePlayerTime(parkour, player, time);
     }

@@ -1,17 +1,24 @@
 package me.geek.tom.parkourtimer.parkour.storage;
 
+import com.mojang.authlib.GameProfile;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import me.geek.tom.parkourtimer.parkour.ActiveParkourManager;
+import me.geek.tom.parkourtimer.parkour.Parkour;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.MessageType;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import xyz.nucleoid.plasmid.util.PlayerRef;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Util;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
 public class ParkourTimeStorage {
@@ -23,29 +30,54 @@ public class ParkourTimeStorage {
         this.times = times;
     }
 
-    public ActiveParkourManager.ParkourCompletionResult updatePlayerTime(PlayerRef player, long time) {
-        if (times.containsKey(player.getId())) {
-            long personalBest = times.getLong(player.getId());
+    public ActiveParkourManager.ParkourCompletionResult updatePlayerTime(Parkour parkour, ServerPlayerEntity player, long time) {
+        if (times.containsKey(player.getUuid())) {
+            long personalBest = times.getLong(player.getUuid());
             if (time < personalBest) {
-                this.times.put(player.getId(), time);
-                this.recomputeTopTen();
+                this.times.put(player.getUuid(), time);
+                this.recomputeTopTen(player, parkour.displayName);
                 return new ActiveParkourManager.ParkourCompletionResult(time, true, personalBest);
             } else {
                 return new ActiveParkourManager.ParkourCompletionResult(time, false, personalBest);
             }
         } else {
-            this.times.put(player.getId(), time);
-            this.recomputeTopTen();
+            this.times.put(player.getUuid(), time);
+            this.recomputeTopTen(player, parkour.displayName);
             return new ActiveParkourManager.ParkourCompletionResult(time, true, -1);
         }
     }
 
-    private void recomputeTopTen() {
-        // TODO: Broadcast when top 3 changes for a parkour
+    private void recomputeTopTen(ServerPlayerEntity player, Text parkourName) {
+        ParkourTime oldLeader;
+        if (!this.topTen.isEmpty()) {
+            oldLeader = this.topTen.get(0);
+        } else {
+            oldLeader = null;
+        }
+
         this.topTen = this.times.object2LongEntrySet().stream()
                 .sorted(Comparator.comparingLong(Object2LongMap.Entry::getLongValue))
                 .limit(10).map(e -> new ParkourTime(e.getKey(), e.getLongValue()))
                 .collect(Collectors.toList());
+
+        ParkourTime leader;
+        if (!this.topTen.isEmpty()) {
+            leader = this.topTen.get(0);
+        } else {
+            leader = null;
+        }
+
+        if (!Objects.equals(leader, oldLeader) && leader != null) {
+            MinecraftServer server = player.getServer();
+            assert server != null;
+            GameProfile leaderProfile = server.getUserCache().getByUuid(leader.player);
+            if (leaderProfile != null) {
+                server.getPlayerManager().broadcastChatMessage(new TranslatableText(
+                        "text.parkour_timer.parkour.leaderboard.topspot", parkourName, leaderProfile.getName())
+                                .formatted(Formatting.GOLD),
+                        MessageType.SYSTEM, Util.NIL_UUID);
+            }
+        }
     }
 
     public CompoundTag toTag() {
@@ -107,6 +139,24 @@ public class ParkourTimeStorage {
                     tag.getUuid("Uuid"),
                     tag.getLong("Time")
             );
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ParkourTime that = (ParkourTime) o;
+
+            if (time != that.time) return false;
+            return Objects.equals(player, that.player);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = player != null ? player.hashCode() : 0;
+            result = 31 * result + (int) (time ^ (time >>> 32));
+            return result;
         }
     }
 }
